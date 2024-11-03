@@ -19,6 +19,9 @@ mongo-shell:
 redis-cli:
 	docker exec -it dev-redis-1 redis-cli
 	
+install-poetry:
+	docker exec -it dev-poetry-1 poetry install --no-root
+	
 python:
 	docker exec -it dev-poetry-1 poetry run python3 $(file)
 	

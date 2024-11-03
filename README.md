@@ -51,6 +51,14 @@ Pour mettre en place le replica-set MongoDB, il faut exécuter la commande suiva
 make replica-init
 ```
 
+### Installation de Poetry
+
+Pour installer l'environnement Poetry, il faut exécuter la commande suivante dans le terminal.
+
+```bash
+make install-poetry
+```
+
 ### Dénormalisation des données
 
 Pour dénormaliser les données, il faut exécuter la commande suivante dans le terminal.
