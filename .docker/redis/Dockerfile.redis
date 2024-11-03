@@ -1,6 +1,9 @@
 # Utilisation de l'image Redis latest basée sur Alpine
 FROM redis/redis-stack-server:latest
 
+ARG REDIS_PASSWORD
+ENV REDIS_PASSWORD=${REDIS_PASSWORD}
+
 # Créer le répertoire pour le fichier redis.conf
 RUN mkdir -p /etc/redis
 
