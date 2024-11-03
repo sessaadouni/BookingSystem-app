@@ -6,7 +6,7 @@ from config.connectionMongo import connect_mongodb as connect
 
 client = connect()
 
-db = client.get_database('BookingSystem')
+db = client.get_database('BookingSystemDB')
 
 def load_vols_from_mongo() -> list:
   """

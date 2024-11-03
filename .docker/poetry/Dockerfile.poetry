@@ -7,10 +7,9 @@ RUN apk add --no-cache \
     build-base \
     libffi-dev \
     openssl-dev \
-    cargo
-
-# Mettre à jour pip pour éviter des problèmes de compilation
-RUN pip install --upgrade pip
+    cargo && \
+    pip install --upgrade pip && \
+    rm -rf /var/cache/apk/*
 
 # Installer Poetry
 RUN curl -sSL https://install.python-poetry.org | python3 -
