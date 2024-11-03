@@ -1,0 +1,46 @@
+\documentclass[a4paper,10pt]{report}
+
+% Import packages
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\DeclareGraphicsExtensions{.pdf,.png,.jpg}
+\graphicspath{{./img/}}
+
+\usepackage{fancyhdr}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{tcolorbox}
+\usepackage{float}
+
+\lstset{
+  language=Python,
+  basicstyle=\ttfamily\footnotesize,
+  frame=single,
+  breaklines=true,
+  backgroundcolor=\color{gray!10},
+  captionpos=b
+}
+
+% Page layout
+\geometry{hmargin=1.5cm,vmargin=1.5cm}
+\setlength{\parskip}{1em}
+
+\begin{document}
+
+\input{chapters/titlepage}
+
+\tableofcontents
+\newpage
+
+\input{chapters/introduction}
+\input{chapters/materiels_et_methodes}
+\input{chapters/resultats}
+\input{chapters/discussion}
+\input{chapters/conclusion}
+\input{chapters/annexes}
+
+\end{document}

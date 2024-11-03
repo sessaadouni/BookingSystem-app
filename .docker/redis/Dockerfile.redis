@@ -1,0 +1,34 @@
+# Utilisation de l'image Redis latest basée sur Alpine
+FROM redis/redis-stack-server:latest
+
+# Créer le répertoire pour le fichier redis.conf
+RUN mkdir -p /etc/redis
+
+# Créer le fichier redis.conf directement avec echo
+RUN echo "protected-mode yes" > /etc/redis/redis.conf && \
+    echo "requirepass ${REDIS_PASSWORD}" >> /etc/redis/redis.conf && \
+    echo "" >> /etc/redis/redis.conf && \
+    echo "bind 0.0.0.0" >> /etc/redis/redis.conf && \
+    echo "" >> /etc/redis/redis.conf && \
+    echo "loglevel notice" >> /etc/redis/redis.conf && \
+    # echo "logfile \"\"" >> /etc/redis/redis.conf && \
+    echo "logfile /var/log/redis/redis.log" >> /etc/redis/redis.conf && \
+    echo "" >> /etc/redis/redis.conf && \
+    echo "save 900 1" >> /etc/redis/redis.conf && \
+    echo "save 300 10" >> /etc/redis/redis.conf && \
+    echo "save 60 10000" >> /etc/redis/redis.conf && \
+    echo "" >> /etc/redis/redis.conf && \
+    echo "loadmodule /opt/redis-stack/lib/redisearch.so" >> /etc/redis/redis.conf && \
+    echo "loadmodule /opt/redis-stack/lib/rejson.so" >> /etc/redis/redis.conf && \
+    echo "loadmodule /opt/redis-stack/lib/redisbloom.so" >> /etc/redis/redis.conf && \
+    echo "" >> /etc/redis/redis.conf && \
+    echo "maxmemory 100mb" >> /etc/redis/redis.conf && \
+    echo "maxmemory-policy allkeys-lru" >> /etc/redis/redis.conf && \
+    echo "" >> /etc/redis/redis.conf && \
+    echo "appendonly no" >> /etc/redis/redis.conf
+
+# Exposer le port Redis
+EXPOSE 6379
+
+# Démarrer Redis avec la configuration générée
+CMD ["redis-server", "/etc/redis/redis.conf"]

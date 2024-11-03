@@ -1,0 +1,47 @@
+# Utiliser l'image MongoDB officielle comme base
+FROM mongo:latest
+
+# Installer dos2unix pour convertir les fins de ligne et OpenSSL pour générer les clés
+RUN apt-get update && apt-get install -y dos2unix openssl
+
+# Créer les répertoires de travail
+RUN mkdir -p /data/db /data/configdb /data/keyfile /docker-entrypoint-initdb.d
+
+# Générer le fichier mongo-keyfile avec OpenSSL directement dans le conteneur
+RUN openssl rand -base64 756 > /data/keyfile/mongo-keyfile
+
+# Fixer les permissions et le propriétaire pour le fichier keyfile
+RUN chown 999:999 /data/keyfile/mongo-keyfile && chmod 400 /data/keyfile/mongo-keyfile
+
+# Créer un fichier de configuration pour MongoDB
+RUN echo "#mongod.conf\n" > /data/configdb/mongod.conf && \
+  echo "# Network interfaces\n" >> /data/configdb/mongod.conf && \
+  echo "net:\n  port: 27017\n  bindIpAll: true\n" >> /data/configdb/mongod.conf && \
+  echo "# Replica Set\n" >> /data/configdb/mongod.conf && \
+  echo "replication:\n  replSetName: rs0\n" >> /data/configdb/mongod.conf && \
+  echo "storage:\n  dbPath: /data/db\n" >> /data/configdb/mongod.conf && \
+  echo "systemLog:\n  destination: file\n  path: /data/db/mongod.log\n  logAppend: true\n" >> /data/configdb/mongod.conf && \
+  echo "security:\n  authorization: enabled" >> /data/configdb/mongod.conf
+
+# # Créer et ajouter le script d'initialisation du replica set directement dans le Dockerfile
+RUN echo '#!/bin/bash\n' > /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "echo 'Waiting for MongoDB to start...'" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "until mongosh --eval \"db.adminCommand('ping')\" --authenticationDatabase admin --username \${MONGO_INITDB_ROOT_USERNAME} --password \${MONGO_INITDB_ROOT_PASSWORD}; do" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "  >&2 echo 'MongoDB is unavailable - sleeping'" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "  sleep 5" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "done" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "echo 'Initializing replica set for Docker network...'" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "mongosh -u \${MONGO_INITDB_ROOT_USERNAME} -p \${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin --eval \"rs.initiate({_id: 'rs0', members: [{ _id: 0, host: 'mongo1:27017' }, { _id: 1, host: 'mongo2:27017' }, { _id: 2, host: 'mongo3:27017' }]})\"" >> /docker-entrypoint-initdb.d/init-replica.sh && \
+  echo "echo 'Replica set initialized.'" >> /docker-entrypoint-initdb.d/init-replica.sh
+
+# Fixer le format de fichier unix pour le script d'initialisation
+RUN dos2unix /docker-entrypoint-initdb.d/init-replica.sh
+
+# Fixer les permissions d'exécution pour le script d'initialisation
+RUN chmod +x /docker-entrypoint-initdb.d/init-replica.sh
+
+# Démarrer MongoDB sans replication
+# CMD ["mongod", "--bind_ip_all", "--config", "/data/configdb/mongod.conf"]
+
+# Démarrer MongoDB avec la replication
+CMD ["mongod", "--replSet", "rs0", "--bind_ip_all", "--keyFile", "/data/keyfile/mongo-keyfile", "--config", "/data/configdb/mongod.conf"]

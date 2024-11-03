@@ -1,0 +1,128 @@
+services:
+  # Poetry Environment with Python 3.13
+  poetry:
+    build:
+      context: ./.docker/poetry/.
+      dockerfile: Dockerfile.poetry
+    stdin_open: true
+    tty: true
+    stop_grace_period: 5s
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
+    environment:
+      - POETRY_VIRTUALENVS_IN_PROJECT=true
+    command: [ "/bin/sh" ]
+    
+  bdd:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    restart: always
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+  
+  # MongoDB Primary
+  mongo1:
+    build:
+      context: ./.docker/mongo/
+      dockerfile: Dockerfile.mongo
+    ports:
+      - 27017:27017
+    restart: always
+    volumes:
+      - ./.docker-data/mongo1/data:/data/db
+    env_file:
+      - ./.docker/mongo/.env.mongo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # MongoDB Replica Set
+  mongo2:
+    build:
+      context: ./.docker/mongo/
+      dockerfile: Dockerfile.mongo
+    ports:
+      - 27018:27017
+    restart: always
+    volumes:
+      - ./.docker-data/mongo2/data:/data/db
+    env_file:
+      - ./.docker/mongo/.env.mongo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27018/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # MongoDB Replica Set
+  mongo3:
+    build:
+      context: ./.docker/mongo/
+      dockerfile: Dockerfile.mongo
+    ports:
+      - 27019:27017
+    restart: always
+    volumes:
+      - ./.docker-data/mongo3/data:/data/db
+    env_file:
+      - ./.docker/mongo/.env.mongo
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27019/test --quiet
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+
+  # Redis Stack Server
+  redis:
+    build:
+      context: ./.docker/redis/.
+      dockerfile: Dockerfile.redis
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    volumes:
+      - ./.docker-data/redis/data:/data
+      - ./.docker-data/redis/logs:/var/log/redis
+    restart: always
+    env_file:
+      - ./.docker/redis/.env.redis
+    environment:
+      - REDIS_ARGS=--requirepass ${REDIS_PASSWORD}
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+
+# Volumes 
+
+volumes:
+  python-dev:
+    driver: local
+  redis-data:
+    driver: local
+  mongo-data1:
+    driver: local
+  mongo-data2:
+    driver: local
+  mongo-data3:
+    driver: local
+
+# Networks
+
+networks:
+  dev:
+    driver: bridge

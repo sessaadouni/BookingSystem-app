@@ -1,0 +1,319 @@
+% Annexes
+\appendix
+\chapter{Annexes}
+
+\section{Configuration Docker pour Redis}
+\label{ann:docker_redis}
+\begin{verbatim}
+redis:
+  build:
+    context: ./.docker/redis/.
+    dockerfile: Dockerfile.redis
+  ports:
+    - "${REDIS_PORT}:${REDIS_PORT}"
+  volumes:
+    - ./.docker-data/redis/data:/data
+    - ./.docker-data/redis/logs:/var/log/redis
+  restart: always
+  env_file:
+    - ./.docker/redis/.env.redis
+  environment:
+    - REDIS_ARGS=--requirepass ${REDIS_PASSWORD}
+  healthcheck:
+    test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+    interval: 30s
+    timeout: 10s
+    retries: 5
+\end{verbatim}
+
+\section{Configuration Docker pour MongoDB}
+\label{ann:docker_mongo}
+\begin{verbatim}
+mongo:
+  build:
+    context: ./.docker/mongo/
+    dockerfile: Dockerfile.mongo
+  ports:
+    - 27017:27017 # Expose le port 27017
+    - 27018:27018 # Expose le port 27018
+    - 27019:27019 # Expose le port 27019
+  restart: always # Redémarre toujours en cas de crash
+  volumes:
+    - ./.docker-data/mongo/data:/data/db # Monte le volume de données MongoDB
+  env_file:
+    - ./.docker/mongo/.env.mongo # Fichier d'environnement pour MongoDB
+  healthcheck: # Vérifie l'état de santé de MongoDB
+    test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017/test --quiet
+    interval: 30s # Intervalle entre les vérifications
+    timeout: 10s # Délai d'expiration de la commande
+    retries: 5 # Nombre de tentatives avant de considérer le service comme défaillant
+    start_period: 20s # Temps avant le démarrage des vérifications
+  networks:
+    dev:
+      aliases:
+        - localhost # Alias pour le service MongoDB dans le réseau Docker
+\end{verbatim}
+
+\section{Configuration Docker pour Python}
+\label{ann:docker_poetry}
+\begin{verbatim}
+poetry:
+  build:
+    context: ./.docker/poetry/.
+    dockerfile: Dockerfile.poetry
+  stdin_open: true
+  tty: true
+  volumes:
+    - .:/workspace
+  working_dir: /workspace
+  environment:
+    - POETRY_VIRTUALENVS_IN_PROJECT=true
+  command: [ "/bin/sh" ]
+\end{verbatim}
+
+\section{Création des Documents JSON}
+\label{ann:code_json}
+\begin{verbatim}
+  import json
+  import os
+  
+  # Table de correspondance des colonnes
+  tableCorespondance = {
+    "AVIONS.txt": ["NumAv", "NomAv", "CapAv", "VilleAv"],
+    "CLIENTS.txt": ["NumCl", "NomCl", "NumRueCl", "NomRueCl", "CodePosteCl", "VilleCl"],
+    "DEFCLASSES.txt": ["NumVol", "Classe", "CoeffPrix"],
+    "PILOTES.txt": ["NumPil", "NomPil", "NaisPil", "VillePil"],
+    "RESERVATIONS.txt": ["NumCl", "NumVol", "Classe", "NbPlaces"],
+    "VOLS.txt": ["NumVol", "VilleD", "VilleA", "DateD", "HD", "DateA", "HA", "NumPil", "NumAv"],
+  }
+  
+  # Lire les fichiers .txt et les stocker dans un dictionnaire
+  dictAllJson = {}
+  for fileName in os.listdir("src/libs/db/txt"):
+    if fileName.endswith(".txt"):
+      file_path = os.path.join("src/libs/txt", fileName)
+      fields = tableCorespondance[fileName]
+  
+      # Vérifier si la première colonne est une clé unique
+      if fileName in ["DEFCLASSES.txt", "RESERVATIONS.txt"]:
+        # Stocker les données dans une liste pour ces fichiers
+        dictAllJson[fileName] = []
+        with open(file_path, 'r') as fh:
+          for line in fh:
+            description = list(line.strip().split("\t"))
+            if len(description) < len(fields):
+              # Gérer les lignes avec des colonnes manquantes
+              continue
+            data_entry = {}
+            for i, categorie in enumerate(fields):
+              data_entry[categorie] = description[i]
+            dictAllJson[fileName].append(data_entry)
+      else:
+        # Utiliser un dictionnaire avec la première colonne comme clé
+        dictAllJson[fileName] = {}
+        with open(file_path, 'r') as fh:
+          for line in fh:
+            description = list(line.strip().split("\t"))
+            if len(description) < len(fields):
+              # Gérer les lignes avec des colonnes manquantes
+              continue
+            key = description[0]
+            data_entry = {}
+            for i, categorie in enumerate(fields[1:], start=1):
+              data_entry[categorie] = description[i]
+            dictAllJson[fileName][key] = data_entry
+  
+  # Construire la liste des vols
+  vols_list = []
+  for vol_id, vol_data in dictAllJson["VOLS.txt"].items():
+    vol_dict = {"_id": vol_id}
+  
+    # Copier les champs du vol
+    vol_fields_mapping = {
+      "VilleD": "VilleD",
+      "VilleA": "VilleA",
+      "DateD": "DateD",
+      "HD": "HD",
+      "DateA": "DateA",
+      "HA": "HA",
+    }
+    for src_field, dest_field in vol_fields_mapping.items():
+      vol_dict[dest_field] = vol_data.get(src_field, "")
+  
+    # Ajouter l'avion
+    num_av = vol_data.get("NumAv", "")
+    avion_data = dictAllJson["AVIONS.txt"].get(num_av, {})
+    vol_dict["Avion"] = {
+      "NumAv": num_av,
+      "NomAv": avion_data.get("NomAv", ""),
+      "CapAv": avion_data.get("CapAv", ""),
+      "VilleAv": avion_data.get("VilleAv", ""),
+    }
+  
+    # Ajouter le pilote
+    num_pil = vol_data.get("NumPil", "")
+    pilote_data = dictAllJson["PILOTES.txt"].get(num_pil, {})
+    vol_dict["Pilote"] = {
+      "NumPil": num_pil,
+      "NomPil": pilote_data.get("NomPil", ""),
+      "NaisPil": pilote_data.get("NaisPil", ""),
+      "VillePil": pilote_data.get("VillePil", ""),
+    }
+  
+    # Ajouter les classes
+    vol_dict["Classes"] = []
+    for classe in dictAllJson["DEFCLASSES.txt"]:
+      if classe.get("NumVol") == vol_id:
+        vol_dict["Classes"].append({
+          "Classe": classe.get("Classe", ""),
+          "CoeffPrix": classe.get("CoeffPrix", ""),
+        })
+  
+    vols_list.append(vol_dict)
+  
+  # Construire la liste des clients
+  clients_list = []
+  for client_id, client_data in dictAllJson["CLIENTS.txt"].items():
+    client_dict = {
+      "_id": client_id,
+      "NomCl": client_data.get("NomCl", ""),
+      "Adresse": {
+        "NumRueCl": client_data.get("NumRueCl", ""),
+        "NomRueCl": client_data.get("NomRueCl", ""),
+        "CodePosteCl": client_data.get("CodePosteCl", ""),
+        "VilleCl": client_data.get("VilleCl", ""),
+      },
+      "Email": "",      # Champs supplémentaires à remplir si nécessaire
+      "Telephone": "",  # Champs supplémentaires à remplir si nécessaire
+    }
+    clients_list.append(client_dict)
+  
+  # Construire la liste des réservations
+  reservations_list = []
+  reservation_id_counter = 1
+  for reservation_data in dictAllJson["RESERVATIONS.txt"]:
+    reservation_dict = {
+      "_id": f"R{str(reservation_id_counter).zfill(3)}",
+      "VolId": reservation_data.get("NumVol", ""),
+      "ClientId": reservation_data.get("NumCl", ""),
+      "NbPlaces": reservation_data.get("NbPlaces", ""),
+      "Classe": reservation_data.get("Classe", ""),
+    }
+    reservations_list.append(reservation_dict)
+    reservation_id_counter += 1
+  
+  # Écrire les données dans des fichiers JSON séparés
+  with open("src/libs/db/json/vols.json", "w") as f:
+    json.dump(vols_list, f, indent=2, ensure_ascii=False)
+  
+  with open("src/libs/db/json/clients.json", "w") as f:
+    json.dump(clients_list, f, indent=2, ensure_ascii=False)
+  
+  with open("src/libs/db/json/reservations.json", "w") as f:
+    json.dump(reservations_list, f, indent=2, ensure_ascii=False)
+  
+  print("Données extraites avec succès.")
+\end{verbatim}
+
+\section{Insertion des documents dans Redis}
+\label{ann:redis_insert}
+\begin{verbatim}
+  import json
+  import sys, os
+
+  # Définir le chemin 
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+  # Définir le chemin vers le dossier contenant les fichiers JSON
+  SRC = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+  DATA_DIR = os.path.join(SRC, 'libs', 'db', 'json')
+
+  from config.connectionRedis import connect_redis as connect
+
+  # Charger les données JSON
+  with open(os.path.join(DATA_DIR, 'vols.json'), 'r', encoding='utf-8') as f: vols = json.load(f)
+  with open(os.path.join(DATA_DIR, 'clients.json'), 'r', encoding='utf-8') as f:
+    clients = json.load(f)
+  with open(os.path.join(DATA_DIR, 'reservations.json'), 'r', encoding='utf-8') as f:
+    reservations = json.load(f)
+
+  r = connect()
+
+  def clear_redis_database():
+    r.flushdb()
+    
+  clear_redis_database()
+
+  # Insérer les vols dans Redis
+  for vol in vols:
+    vol_id = vol['_id']
+    # Stocker le vol sous la clé 'vol:{vol_id}'
+    r.set(f'vol:{vol_id}', json.dumps(vol))
+
+  # Insérer les clients dans Redis
+  for client in clients:
+    client_id = client['_id']
+    # Stocker le client sous la clé 'client:{client_id}'
+    r.set(f'client:{client_id}', json.dumps(client))
+
+  # Insérer les réservations dans Redis
+  for reservation in reservations:
+    reservation_id = reservation['_id']
+    # Stocker la réservation sous la clé 'reservation:{reservation_id}'
+    r.set(f'reservation:{reservation_id}', json.dumps(reservation))
+
+  print("Données insérées avec succès dans Redis.")
+\end{verbatim}
+
+\subsection{Insertion des documents dans MongoDB}
+\label{ann:mongo_insert}
+\begin{verbatim}
+  import sys, os, json
+
+  sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+  from config.connectionMongo import connect_mongodb as connect
+
+  # Définir le chemin vers le dossier contenant les fichiers JSON
+  SRC = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+  DATA_DIR = os.path.join(SRC, 'libs', 'DAL', 'db', 'json')
+
+  # Charger les données JSON
+  with open(os.path.join(DATA_DIR, 'vols.json'), 'r', encoding='utf-8') as f: vols = json.load(f)
+  with open(os.path.join(DATA_DIR, 'clients.json'), 'r', encoding='utf-8') as f: clients = json.load(f)
+  with open(os.path.join(DATA_DIR, 'reservations.json'), 'r', encoding='utf-8') as f: reservations = json.load(f)
+
+  # Se connecter à MongoDB
+  client = connect()
+
+  db = client.get_database('BookingSystem')
+
+  # Créer ou obtenir les collections
+  vols_collection = db.get_collection('vols')
+  clients_collection = db.get_collection('clients')
+  reservations_collection = db.get_collection('reservations')
+
+  # Effacer les collections existantes pour éviter les doublons lors de ré-exécutions
+  vols_collection.delete_many({})
+  clients_collection.delete_many({})
+  reservations_collection.delete_many({})
+
+  # Insérer les documents JSON dans chaque collection respective
+  vols_collection.insert_many(vols)
+  clients_collection.insert_many(clients)
+  reservations_collection.insert_many(reservations)
+
+  print("Les données ont été insérées avec succès dans MongoDB.")
+\end{verbatim}
+
+\section{Profiling des Requêtes}
+\label{ann:profiling}
+\begin{verbatim}
+# Détails de la performance des requêtes dans chaque base
+\end{verbatim}
+
+\section{Dépôt Git}
+\label{ann:git_repo}
+Vous trouverez le dépôt Git de ce projet sur GitHub: \url{https://github.com/}.
+
+Pour pouvoir tester le projet vous pourrez suivre les étapes mises dans le fichier \texttt{README.md}.

@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "tuto"
+version = "0.1.0"
+description = ""
+authors = ["sessaadouni <essaadouni.s@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.13"
+redis = "^5.0.8"
+python-dotenv = "^1.0.1"
+pydantic = "^2.9.2"
+pymongo = {extras = ["srv"], version = "^4.10.1"}
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

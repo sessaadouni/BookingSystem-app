@@ -1,0 +1,42 @@
+# Fichiers d'environnement
+.env
+.env.mongo
+.env.redis
+
+# Environnement Python
+.venv/
+poetry.lock
+
+# Fichiers VSCode
+.vscode/
+
+# Fichiers de cache Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Données JSON de la DAL
+src/libs/DAL/db/json/*
+
+# Répertoires de build
+dist/
+build/
+*.egg-info/
+
+# Cache Docker
+.docker-data/
+
+# Fichiers LaTeX temporaires
+Report/*.toc
+Report/*.synctex.gz
+Report/*.aux
+Report/*.fdb_latexmk
+Report/*.fls
+Report/*.out
+Report/*.log
+
+# Fichiers temporaires d'éditeurs
+*.swp
+*.swo
+*.tmp
