@@ -1,5 +1,10 @@
 from pymongo import MongoClient, ASCENDING # type: ignore
 from typing import List, Optional, Dict, Callable
+import sys, os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from decorators.timing import timing_decorator
 
 class RequestsMongo:
   """
@@ -66,7 +71,7 @@ class RequestsMongo:
     """
     result = self.vols_collection.update_one({'_id': vol_id}, {'$set': update_data})
     return result.modified_count
-
+  
   def delete_vol(self, vol_id: str) -> int:
     """
     Supprime un vol.
@@ -140,6 +145,7 @@ class RequestsMongo:
     reservation = self.reservations_collection.find_one({'_id': reservation_id}, projection)
     return reservation
 
+  @timing_decorator('MongoDB')
   def get_arrival_cities(self) -> List[str]:
     """
     Retourne une liste de toutes les villes d'arrivée des vols.
@@ -154,6 +160,7 @@ class RequestsMongo:
     villes = list(self.vols_collection.aggregate(pipeline))
     return villes
 
+  @timing_decorator('MongoDB')
   def get_arrival_city_by_id(self, vol_id: str) -> Optional[str]:
     """
     Retourne la ville d'arrivée d'un vol en fonction de son identifiant.
@@ -169,6 +176,7 @@ class RequestsMongo:
       return vol['VilleA']
     return None
 
+  @timing_decorator('MongoDB')
   def get_pilotes(self) -> List[str]:
     """
     Retourne une liste des noms de tous les pilotes, sans doublons.
@@ -179,6 +187,7 @@ class RequestsMongo:
     pilotes = self.vols_collection.distinct('Pilote.NomPil')
     return pilotes
 
+  @timing_decorator('MongoDB')
   def get_vols_by_departure_city(self, departure_city: str, projection: Optional[Dict] = None) -> List[dict]:
     """
     Retourne une liste des vols au départ d'une ville donnée.
@@ -193,6 +202,8 @@ class RequestsMongo:
     return vols
 
   # Méthodes optimisées avec pipelines d'agrégation
+  
+  @timing_decorator('MongoDB')
   def get_reservations_by_client(self, client_id: str) -> List[dict]:
     """
     Retourne la liste des réservations pour un client donné, avec les détails des vols.
@@ -216,6 +227,7 @@ class RequestsMongo:
     reservations = list(self.reservations_collection.aggregate(pipeline))
     return reservations
 
+  @timing_decorator('MongoDB')
   def get_clients_by_flight(self, vol_id: str) -> List[dict]:
     """
     Retourne la liste des clients ayant des réservations sur un vol donné, avec les détails des clients.
@@ -239,6 +251,7 @@ class RequestsMongo:
     reservations = list(self.reservations_collection.aggregate(pipeline))
     return reservations
 
+  @timing_decorator('MongoDB')
   def get_flights_by_pilot(self, nom_pilote: str, projection: Optional[Dict] = None) -> List[dict]:
     """
     Retourne la liste des vols opérés par un pilote donné.
@@ -253,6 +266,7 @@ class RequestsMongo:
     vols = list(self.vols_collection.find({'Pilote.NomPil': nom_pilote}, projection))
     return vols
 
+  @timing_decorator('MongoDB')
   def get_clients_by_pilot(self, nom_pilote: str) -> List[dict]:
     """
     Retourne la liste des clients ayant des réservations sur les vols opérés par un pilote donné.

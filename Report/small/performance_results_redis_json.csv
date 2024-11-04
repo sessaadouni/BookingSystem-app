@@ -1,0 +1,12 @@
+method_group,function_name,execution_time
+REDIS_JSON,load_data_from_redis,0.0005776899997727014
+REDIS_JSON,get_arrival_cities,1.7400016076862812e-06
+REDIS_JSON,get_arrival_city_by_id,1.9759972929023206e-06
+REDIS_JSON,get_pilotes,6.7069995566271245e-06
+REDIS_JSON,get_pilotes,5.35899744136259e-06
+REDIS_JSON,get_vols_by_departure_city,2.9099974199198186e-06
+REDIS_JSON,get_reservations_by_client,3.0480005079880357e-06
+REDIS_JSON,get_clients_by_flight,2.5909976102411747e-06
+REDIS_JSON,get_flights_by_pilot,1.806001819204539e-06
+REDIS_JSON,get_flights_by_pilot,1.8290011212229729e-06
+REDIS_JSON,get_clients_by_pilot,2.068799949483946e-05

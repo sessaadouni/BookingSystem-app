@@ -1,0 +1,12 @@
+\babel@toc {french}{}\relax 
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Architecture du projet avec Docker et bases NoSQL}}{4}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Schéma de la base SQL}}{5}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Insertion des documents dans Redis}}{8}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Insertion des documents dans MongoDB}}{9}{figure.caption.11}%
+\addvspace {10\p@ }
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Comparaison des performances avec les données d'origine et avec un grand volume de données}}{11}{figure.caption.12}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }

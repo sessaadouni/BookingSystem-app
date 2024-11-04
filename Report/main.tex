@@ -1,4 +1,4 @@
-\documentclass[a4paper,10pt]{report}
+\documentclass[10pt,a4paper]{report}
 
 % Import packages
 \usepackage[utf8]{inputenc}
@@ -12,9 +12,35 @@
 \usepackage{fancyhdr}
 \usepackage{geometry}
 \usepackage{listings}
+\usepackage{xcolor}
+\usepackage{listingsutf8}
 \usepackage{caption}
+\usepackage{subcaption}
 \usepackage{tcolorbox}
 \usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{rotating}
+\usepackage{makecell}
+\usepackage{adjustbox}
+\usepackage{setspace}
+\usepackage{courier}
+\usepackage{mathptmx}
+\usepackage{appendix}
+
+% Page layout
+\geometry{margin=2.5cm}
+\onehalfspacing
+\setlength{\parskip}{1em}
+
+% Configure fancyhdr
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{\leftmark}
+\rhead{\thepage}
+
+% Listings settings
+
 
 \lstset{
   language=Python,
@@ -22,25 +48,57 @@
   frame=single,
   breaklines=true,
   backgroundcolor=\color{gray!10},
-  captionpos=b
+  captionpos=b,
+  keywordstyle=\color{blue},
+  stringstyle=\color{red},
+  commentstyle=\color{green!50!black},
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  stepnumber=1,
+  numbersep=10pt,
+  tabsize=2,
+  showspaces=false,
+  showstringspaces=false,
+  inputencoding=utf8,
+  extendedchars=true,
+  literate={é}{{\'e}}1
+           {è}{{\`e}}1
+           {à}{{\`a}}1
+           {ç}{{\c{c}}}1
+           {ê}{{\^e}}1
+           {ù}{{\`u}}1
+           {î}{{\^i}}1
+           {ô}{{\^o}}1
+           {â}{{\^a}}1
+           {É}{{\'E}}1
+           {È}{{\`E}}1
+           {À}{{\`A}}1
+           {Ç}{{\c{C}}}1
+           {Ê}{{\^E}}1
+           {Û}{{\^U}}1
+           {Î}{{\^I}}1
+           {Ô}{{\^O}}1
+           {Â}{{\^A}}1
 }
-
-% Page layout
-\geometry{hmargin=1.5cm,vmargin=1.5cm}
-\setlength{\parskip}{1em}
 
 \begin{document}
 
 \input{chapters/titlepage}
 
+\pagenumbering{roman}
 \tableofcontents
 \newpage
+\listoffigures
+\listoftables
+\newpage
+\pagenumbering{arabic}
 
 \input{chapters/introduction}
 \input{chapters/materiels_et_methodes}
 \input{chapters/resultats}
 \input{chapters/discussion}
 \input{chapters/conclusion}
+\appendix
 \input{chapters/annexes}
 
 \end{document}

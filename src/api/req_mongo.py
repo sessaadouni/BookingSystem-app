@@ -1,4 +1,5 @@
-import os, json, sys
+import os
+import sys
 
 # Ajouter le chemin au module de connexion Redis si nécessaire
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -6,6 +7,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from config.connectionMongo import connect_mongodb as connect
 
 from libs.services.Requests_mongo import RequestsMongo
+
+from decorators.timing import write_performance_results_to_csv
 
 if __name__ == "__main__":
   req_mongo = RequestsMongo(connect)
@@ -72,3 +75,5 @@ if __name__ == "__main__":
     client = res.get("Client", {})
     print(f"Client ID: {client.get('_id', 'N/A')}, Nom: {client.get('NomCl', 'N/A')}, Vol ID: {res['VolId']}, NbPlaces: {res['NbPlaces']}, Classe: {res['Classe']}")
     print()
+    
+  write_performance_results_to_csv('./Report/performance_results_mongo.csv')

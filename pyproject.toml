@@ -11,6 +11,10 @@ redis = "^5.0.8"
 python-dotenv = "^1.0.1"
 pydantic = "^2.9.2"
 pymongo = {extras = ["srv"], version = "^4.10.1"}
+matplotlib = "^3.9.2"
+pandas = "^2.2.3"
+seaborn = "^0.13.2"
+faker = "^30.8.2"
 
 [build-system]
 requires = ["poetry-core"]

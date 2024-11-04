@@ -1,4 +1,9 @@
 from typing import List, Optional
+import sys, os
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+from decorators.timing import timing_decorator
 
 class Requests_Json:
   ''' 
@@ -10,7 +15,7 @@ class Requests_Json:
     reservations: liste des réservations
   '''
   
-  def __init__(self, vols: Optional[List[dict]] = None, clients: Optional[List[dict]] = None, reservations: Optional[List[dict]] = None):
+  def __init__(self, vols: Optional[List[dict]] = None, clients: Optional[List[dict]] = None, reservations: Optional[List[dict]] = None, method_group: str = 'JSON'):
     """
     [Summary]
       Initialise une instance de la classe.
@@ -19,6 +24,7 @@ class Requests_Json:
       vols: liste des vols
       clients: liste des clients
       reservations: liste des réservations
+      method_group: groupe de méthode pour le décorateur de timing
       
     [Details]
       Les arguments sont optionnels, mais il est nécessaire de les passer en paramètres.
@@ -27,10 +33,13 @@ class Requests_Json:
     self.vols = vols
     self.clients = clients
     self.reservations = reservations
+    
+    self.method_group = method_group
+    
     self.vols_index = {vol["_id"]: vol for vol in self.vols} if self.vols is not None else None
     self.clients_index = {client["_id"]: client for client in self.clients} if self.clients is not None else None
     self.reservations_index = {res["_id"]: res for res in self.reservations} if self.reservations is not None else None
-    
+  
   def get_vols(self) -> list[dict]:
     """
     [Summary]
@@ -61,7 +70,7 @@ class Requests_Json:
     """
     return self.reservations
   
-  def get_vols_by_id(self, vol_id: str) -> dict:
+  def get_vol_by_id(self, vol_id: str) -> dict:
     """
     [Summary]
       Retourne un vol en fonction de son identifiant.
@@ -109,6 +118,7 @@ class Requests_Json:
         return reservation
     return None
   
+  @timing_decorator()
   def get_arrival_cities(self) -> list:
     """
     [Summary]
@@ -119,6 +129,7 @@ class Requests_Json:
     """
     return [vol["VilleA"] for vol in self.vols]
   
+  @timing_decorator()
   def get_arrival_city_by_id(self, vol_id: str) -> str:
     """
     [Summary]
@@ -135,6 +146,7 @@ class Requests_Json:
         return vol["VilleA"]
     return None
   
+  @timing_decorator()
   def get_pilotes(self) -> list:
     """
     [Summary]
@@ -145,6 +157,7 @@ class Requests_Json:
     """
     return list(set(vol["Pilote"]["NomPil"] for vol in self.vols if "Pilote" in vol and vol["Pilote"]["NomPil"]))
   
+  @timing_decorator()
   def get_vols_by_departure_city(self, departure_city: str) -> list[dict]:
     """
     [Summary]
@@ -159,6 +172,8 @@ class Requests_Json:
     return [vol for vol in self.vols if vol["VilleD"].lower() == departure_city.lower()]
   
   # Jointures
+  
+  @timing_decorator()
   def get_reservations_by_client(self, client_id: str) -> list[dict]:
     """
     [Summary]
@@ -179,6 +194,7 @@ class Requests_Json:
       res["Vol"] = vol  # Ajouter les détails du vol
     return client_reservations
 
+  @timing_decorator()
   def get_clients_by_flight(self, vol_id: str) -> list[dict]:
     """
     [Summary]
@@ -199,6 +215,7 @@ class Requests_Json:
       res["Client"] = client  # Ajouter les détails du client
     return flight_reservations
 
+  @timing_decorator()
   def get_flights_by_pilot(self, nom_pilote: str) -> list[dict]:
     """
     [Summary]
@@ -212,6 +229,7 @@ class Requests_Json:
     """
     return [vol for vol in self.vols if vol["Pilote"]["NomPil"] == nom_pilote]
 
+  @timing_decorator()
   def get_clients_by_pilot(self, nom_pilote: str) -> list[dict]:
     """
     [Summary]

@@ -1,0 +1,9 @@
+method_group,function_name,execution_time
+REDIS_JSON,load_data_from_redis,40.38943572899734
+REDIS_JSON,get_arrival_cities,0.01369848399917828
+REDIS_JSON,get_vols_by_departure_city,0.021597282000584528
+REDIS_JSON,get_reservations_by_client,0.019360631005838513
+REDIS_JSON,get_clients_by_flight,0.021336443001928274
+REDIS_JSON,get_flights_by_pilot,0.015829732998099644
+REDIS_JSON,get_flights_by_pilot,0.015754748004837893
+REDIS_JSON,get_clients_by_pilot,0.05264078199979849

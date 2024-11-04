@@ -1,4 +1,4 @@
-import os, json, sys
+import os, sys
 
 # Ajouter le chemin au module de connexion Redis si nécessaire
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
@@ -6,14 +6,21 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from libs.services.Json_Query_Search import Requests_Json
 from libs.services.get_data_from_mongo import load_vols_from_mongo, load_clients_from_mongo, load_reservations_from_mongo
 
-if __name__ == "__main__":
-  from collections import Counter
-  
+from decorators.timing import write_performance_results_to_csv, timing_decorator
+
+@timing_decorator('MONGO_JSON')
+def load_data_from_mongo():
   vols = load_vols_from_mongo()
   clients = load_clients_from_mongo()
   reservations = load_reservations_from_mongo()
+  return vols, clients, reservations
+
+if __name__ == "__main__":
+  from collections import Counter
   
-  req = Requests_Json(vols, clients, reservations)
+  vols, clients, reservations = load_data_from_mongo()
+  
+  req = Requests_Json(vols, clients, reservations, method_group='MONGO_JSON')
   
   # Obtenir toutes les villes d'arrivée
   villes_counter = Counter(req.get_arrival_cities())
@@ -77,3 +84,5 @@ if __name__ == "__main__":
     client = res.get("Client", {})
     print(f"Client ID: {client.get('_id', 'N/A')}, Nom: {client.get('NomCl', 'N/A')}, Vol ID: {res['VolId']}, NbPlaces: {res['NbPlaces']}, Classe: {res['Classe']}")
     print()
+    
+  write_performance_results_to_csv('./Report/performance_results_mongo_json.csv')

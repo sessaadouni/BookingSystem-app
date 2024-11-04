@@ -162,11 +162,11 @@ Nous avons fait ce choix pour les raisons suivantes:
 
 \section{Conversion des données TXT en JSON}
 
-Le script~\ref{ann:code_json} montre la création de 3 documents json a partir de nos 6 tables, ces tables peuveut être intégré facilement à Redis en ayant comme index le nom de la collection et indice (id) et pour mongo cela peut être représenté en trois collections chacune avec ses documents.\@ et chaque document a un id unique.
+Le script~\ref{lst:code_json} montre la création de 3 documents json a partir de nos 6 tables, ces tables peuveut être intégré facilement à Redis en ayant comme index le nom de la collection et indice (id) et pour mongo cela peut être représenté en trois collections chacune avec ses documents.\@ et chaque document a un id unique.
 
 \subsection{Insertion des documents dans Redis}
 
-Pour insérer les documents dans Redis nous utiliserons le script~\ref{ann:redis_insert} qui charge les données JSON, les insère dans Redis et affiche un message de succès.
+Pour insérer les documents dans Redis nous utiliserons le script~\ref{lst:redis_insert} qui charge les données JSON, les insère dans Redis et affiche un message de succès.
 
 la figure \ref{fig:redis_insert} représente la sortie de la commande \texttt{redis-cli} qui affiche les données insérées dans Redis.
 
@@ -179,7 +179,7 @@ la figure \ref{fig:redis_insert} représente la sortie de la commande \texttt{re
 
 \subsection{Insertion des documents dans MongoDB}
 
-Pour insérer les documents dans MongoDB nous utiliserons le script~\ref{ann:mongo_insert} qui charge les données JSON, les insère dans MongoDB et affiche un message de succès.
+Pour insérer les documents dans MongoDB nous utiliserons le script~\ref{lst:mongo_insert} qui charge les données JSON, les insère dans MongoDB et affiche un message de succès.
 
 la figure~\ref{fig:mongo_insert} représente la sortie de la commande \texttt{mongo} qui affiche les données insérées dans MongoDB.\@
 

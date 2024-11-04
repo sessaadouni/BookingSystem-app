@@ -1,0 +1,10 @@
+method_group,function_name,execution_time
+MongoDB,get_arrival_cities,0.006520719995023683
+MongoDB,get_arrival_city_by_id,0.0026781159976962954
+MongoDB,get_pilotes,0.00700407999829622
+MongoDB,get_pilotes,0.0038522879985976033
+MongoDB,get_vols_by_departure_city,0.013763111994194333
+MongoDB,get_reservations_by_client,0.009882580001431052
+MongoDB,get_clients_by_flight,0.008144343002641108
+MongoDB,get_flights_by_pilot,0.0066365140010020696
+MongoDB,get_clients_by_pilot,0.02675003900367301

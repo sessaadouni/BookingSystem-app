@@ -1,0 +1,12 @@
+method_group,function_name,execution_time
+MONGO_JSON,load_data_from_mongo,0.003973159997258335
+MONGO_JSON,get_arrival_cities,1.495200558565557e-05
+MONGO_JSON,get_arrival_city_by_id,3.3950993383768946e-05
+MONGO_JSON,get_pilotes,0.00011284799984423444
+MONGO_JSON,get_pilotes,0.00010339799337089062
+MONGO_JSON,get_vols_by_departure_city,8.021399844437838e-05
+MONGO_JSON,get_reservations_by_client,1.483999949414283e-05
+MONGO_JSON,get_clients_by_flight,1.0149000445380807e-05
+MONGO_JSON,get_flights_by_pilot,5.4059004469309e-05
+MONGO_JSON,get_flights_by_pilot,6.472100358223543e-05
+MONGO_JSON,get_clients_by_pilot,0.00013635599316330627
