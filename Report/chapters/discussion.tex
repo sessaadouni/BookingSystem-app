@@ -55,6 +55,52 @@ Les résultats montrent que Redis offre des temps de réponse plus rapides pour 
   \end{adjustbox}
 \end{table}
 
+Les performances des bases de données \textbf{MongoDB}, \textbf{MONGO\_JSON} et \textbf{REDIS\_JSON} ont été évaluées en exécutant plusieurs fonctions clés du système. Les résultats sont présentés dans les Tableaux~\ref{tab:performance1} et \ref{tab:performance2}, et illustrés dans la Figure~\ref{fig:comparaison_performances}.
+
+\subsection{Performances avec le Jeu de Données d'Origine}
+
+Le Tableau~\ref{tab:performance1} présente les temps d'exécution des différentes fonctions avec le jeu de données initial, qui contient un volume de données relativement faible. On constate que \textbf{REDIS\_JSON} offre les temps de réponse les plus rapides pour la majorité des fonctions. Par exemple, la fonction \texttt{get\_flights\_by\_pilot} est exécutée en 0.000002 secondes avec \textbf{REDIS\_JSON}, contre 0.001110 secondes avec \textbf{MongoDB}, ce qui représente une amélioration de 99.84\%.
+
+De même, \textbf{MONGO\_JSON} montre des améliorations significatives par rapport à \textbf{MongoDB} standard, avec des gains de performance allant jusqu'à 98\%. Ces améliorations sont dues à l'utilisation d'un format JSON dénormalisé, qui réduit le besoin de jointures et permet un accès plus rapide aux données.
+
+\subsection{Performances avec un Grand Volume de Données}
+
+Le Tableau~\ref{tab:performance2} illustre les performances des mêmes fonctions, mais cette fois avec un grand volume de données. Dans ce scénario, les performances de \textbf{REDIS\_JSON} se dégradent considérablement pour certaines fonctions. Par exemple, la fonction \texttt{load\_data\_from\_redis} prend 40.389436 secondes, ce qui est nettement supérieur aux temps observés avec \textbf{MongoDB}.
+
+En revanche, \textbf{MongoDB} démontre une meilleure scalabilité. Les temps d'exécution restent relativement stables malgré l'augmentation du volume de données. La fonction \texttt{get\_clients\_by\_pilot} est exécutée en 0.043849 secondes avec \textbf{MongoDB}, contre 0.052641 secondes avec \textbf{REDIS\_JSON}, indiquant une meilleure performance pour les requêtes complexes sur de grandes bases de données.
+
+\subsection{Interprétation des Résultats}
+
+Ces résultats mettent en évidence plusieurs points clés :
+
+\begin{itemize}
+  \item \textbf{REDIS\_JSON} est extrêmement performant pour les opérations de lecture simples et les petits volumes de données grâce à son stockage en mémoire. Cependant, il montre des limitations en termes de scalabilité lorsque le volume de données augmente.
+  \item \textbf{MongoDB}, bien que légèrement moins performant sur de petites requêtes, offre une meilleure gestion des grands volumes de données et des requêtes complexes, grâce à sa structure de stockage optimisée et sa capacité à gérer des index efficaces.
+  \item \textbf{MONGO\_JSON} combine les avantages de MongoDB avec une structure de données dénormalisée, offrant de bonnes performances sur des volumes de données moyens, mais peut être limité par rapport à MongoDB standard pour des données massives.
+\end{itemize}
+
+La Figure~\ref{fig:comparaison_performances} illustre visuellement ces tendances, montrant comment les temps d'exécution évoluent en fonction du volume de données pour chaque base de données. On y observe que si \textbf{REDIS\_JSON} est le plus rapide sur des petits volumes, \textbf{MongoDB} devient plus performant à mesure que le volume de données augmente.
+
+\subsection{Conclusion sur le Choix des Bases de Données}
+
+Le choix entre \textbf{MongoDB} et \textbf{REDIS\_JSON} dépend fortement des besoins spécifiques du projet :
+
+\begin{itemize}
+  \item Si l'application nécessite des temps de réponse ultra-rapides pour des opérations simples sur de petits volumes de données, \textbf{REDIS\_JSON} est recommandé.
+  \item Pour des applications manipulant de grands volumes de données avec des requêtes complexes, \textbf{MongoDB} offre une meilleure performance globale et une scalabilité accrue.
+\end{itemize}
+
+Il est donc essentiel de prendre en compte le volume de données et la nature des requêtes lors de la sélection de la base de données appropriée pour une application donnée.
+
+\section{Comparaison des Ressources Matérielles}
+
+La figure~\ref{fig:comparaison_resources} illustre les ressources matérielles utilisées pour le développement de ce projet, en comparant les performances des requêtes avec les données d'origine et avec un grand volume de données. On y observe que les ressources utilisées sont basses pour des requêtes avec mongo pour un volume de données faible et pour un volume de données important, les performances sont plus élevées avec des requêtes complexes et avec des données massives.
 
 \section{Limites et Améliorations Possibles}
-Bien que NoSQL ait permis une flexibilité accrue, certains cas d'utilisation nécessitent encore une réflexion pour l'optimisation des écritures massives.
+En implémentant Redis et mongo on peux voir que les deux ont certaines limites en fonction du nombre de données présents dans la base de données.
+Une application peut contenir les 2 types de base de données mais ne contenant pas les mêmes données.
+
+Par exemple:
+Si on prend en exemple notre cas d'étude pour les vols... on peux mettre tout ça dans notre base mongo car on aura un nombre très important de données dans la base et si on imagine un système d'authentification a votre système de gestion de vols, on pourra stocker les utilisateurs dans mongo et les sessions d'authentification dans redis car on a un faible stockage de données stockées et redis permet de stocker et faire des requêtes pour une petite gestion de mémoire pour ne pas allourdir le système.
+
+Bien que NoSQL ait permis une flexibilité accrue, certains cas d'utilisation nécessitent encore une réflexion pour l'optimisation des écritures massives. On remarque qu'actuellement entre le SQL et le NoSQL on trouve encore certaines limites, faut essayer de voir un nouveau type de base de données pour répondre à ces limites comme le graph database ou le NewSQL avec CockroachDB.

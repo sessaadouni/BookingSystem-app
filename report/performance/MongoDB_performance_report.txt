@@ -1,0 +1,24 @@
+Performance Report for MongoDB
+==================================================
+Total Functions: 9
+Total Execution Time: 2.061479 seconds
+Average Execution Time: 0.229053 seconds
+Median Execution Time: 0.206813 seconds
+Execution Time Std Dev: 0.045794
+Max Execution Time: 0.330782 seconds
+Min Execution Time: 0.202615 seconds
+Average Memory Used: 0.81 MB
+Average CPU Usage: 9.30%
+
+==================================================
+Detailed Results:
+==================================================
+Function: get_arrival_cities, Execution Time: 0.330782s, Memory Used: 5.94 MB, CPU Usage: 15.80%
+Function: get_arrival_city_by_id, Execution Time: 0.202615s, Memory Used: 0.00 MB, CPU Usage: 6.20%
+Function: get_pilotes, Execution Time: 0.213238s, Memory Used: 0.00 MB, CPU Usage: 5.60%
+Function: get_pilotes, Execution Time: 0.206813s, Memory Used: 0.00 MB, CPU Usage: 8.40%
+Function: get_vols_by_departure_city, Execution Time: 0.205007s, Memory Used: 0.00 MB, CPU Usage: 4.90%
+Function: get_reservations_by_client, Execution Time: 0.206343s, Memory Used: 0.00 MB, CPU Usage: 8.30%
+Function: get_clients_by_flight, Execution Time: 0.203539s, Memory Used: 0.00 MB, CPU Usage: 17.30%
+Function: get_flights_by_pilot, Execution Time: 0.210339s, Memory Used: 0.25 MB, CPU Usage: 3.40%
+Function: get_clients_by_pilot, Execution Time: 0.282803s, Memory Used: 1.12 MB, CPU Usage: 13.80%

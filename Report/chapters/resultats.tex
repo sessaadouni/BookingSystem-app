@@ -4,13 +4,42 @@ Les résultats de la migration sont présentés sous forme de documents JSON pou
 
 Pour illustrer les avantages de la dénormalisation, nous avons utilisé des exemples de requêtes et de jointures pour montrer comment les données peuvent être manipulées et agrégées de manière plus efficace. Ces exemples sont présentés dans la section suivante.
 
+\section{Réplication des résultats}
+
+Avec MongoDB, nous avons mis en place un système de réplication entre trois serveurs pour garantir un accès continu à nos données. Cela permet aussi de réduire les temps de chargement des données, car les données sont chargées de manière asynchrone sur les serveurs. On peux voir dans~\ref{lst:docker_mongo} la configuration des serveurs MongoDB et dans~\ref{lst:replica_set} le script de réplication qui montre comment on ajoute un serveur supplémentaire à la réplication en tant que membres.
+
 \section{Exemple de requêtes et de jointures}
 
 En ayant convertit nos tables SQL en JSON, nous pouvons normaliser les requêtes et les jointures pour manipuler les données de manière plus efficace que les données viennent d'un fichier JSON, récupéré par redis ou par mongo.
 
+On peux voir dans~\ref{lst:results_queries} les résultats des requêtes avec les données d'origine et le résultat des requêtes est le meme pour Redis, MongoDB et MONGO\_JSON.\@
+
+\section{Utilisation des ressources matérielles}
+
+Voici les ressources matérielles utilisées pour le développement de ce projet:
+
+\begin{figure}[H]
+  \centering
+  \begin{subfigure}[t]{0.88\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{small/resources_comparison_global_metrics.png}
+    \caption{Comparaison des ressources matérielles avec les données d'origine}
+    \label{fig:res_origin}
+  \end{subfigure}
+  \hfill
+  \begin{subfigure}[t]{0.88\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{resources_comparison_global_metrics.png}
+    \caption{Comparaison des ressources matérielles avec un grand volume de données}
+    \label{fig:res_total}
+  \end{subfigure}
+  \caption{Comparaison des ressources matérielles utilisées avec les données d'origine et avec un grand volume de données}
+  \label{fig:comparaison_resources}
+\end{figure}
+
 \section{Comparaison des Performances}
 
-La figure~\ref{fig:image1} montre les performances des requêtes avec les données d'origine, tandis que la figure~\ref{fig:image2} montre les performances avec un grand volume de données.
+La figure~\ref{fig:origin} montre les performances des requêtes avec les données d'origine, tandis que la figure~\ref{fig:total} montre les performances avec un grand volume de données.
 
 On peut voir que pour un nombre de données faibles, le temps de requêtes avec Redis en important en JSON est plus faible que avec MongoDB en JSON et avec des recherches MongoDB (Pipelines). Cependant, avec un volume de données plus important, les performances sont plus élevées avec MongoDB (Pipelines) et en stocker les données Mongo en JSON.\@
 
@@ -20,16 +49,15 @@ On peut voir que pour un nombre de données faibles, le temps de requêtes avec 
     \centering
     \includegraphics[width=\linewidth]{small/execution_times_comparison_total.png}
     \caption{Comparaison des performances avec les données d'origine}
-    \label{fig:image1}
+    \label{fig:origin}
   \end{subfigure}
   \hfill
   \begin{subfigure}[t]{0.45\textwidth}
     \centering
     \includegraphics[width=\linewidth]{execution_times_comparison_total.png}
     \caption{Comparaison des performances avec un grand volume de données}
-    \label{fig:image2}
+    \label{fig:total}
   \end{subfigure}
-  % Optionnel : Ajouter une légende globale pour l'ensemble des images
   \caption{Comparaison des performances avec les données d'origine et avec un grand volume de données}
   \label{fig:comparaison_performances}
 \end{figure}

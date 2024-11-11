@@ -36,3 +36,6 @@ inject-mongo:
 	
 remove-pycache:
 	find . -name "__pycache__" -type d -exec rm -rf {} +
+	
+remove-pytest-cache:
+	find . -name ".pytest_cache" -type d -exec rm -rf {} +

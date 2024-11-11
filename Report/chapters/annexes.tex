@@ -86,6 +86,23 @@ mongo3:
     start_period: 20s
 \end{lstlisting}
 
+\section{Replica Set MongoDB}
+\label{ann:replica_set}
+\begin{lstlisting}[language=Python, caption=Replica Set MongoDB, label=lst:replica_set]
+#!/bin/bash
+
+echo 'Waiting for MongoDB to start...'
+until mongosh --eval "db.adminCommand('ping')" --authenticationDatabase admin --username ${MONGO_INITDB_ROOT_USERNAME} --password ${MONGO_INITDB_ROOT_PASSWORD}; do
+  >&2 echo 'MongoDB is unavailable - sleeping'
+  sleep 5
+done
+
+echo 'Initializing replica set for Docker network...'
+mongosh -u ${MONGO_INITDB_ROOT_USERNAME} -p ${MONGO_INITDB_ROOT_PASSWORD} --authenticationDatabase admin --eval "rs.initiate({_id: 'rs0', members: [{ _id: 0, host: 'mongo1:27017' }, { _id: 1, host: 'mongo2:27017' }, { _id: 2, host: 'mongo3:27017' }]})"
+
+echo 'Replica set initialized.'
+\end{lstlisting}
+
 \section{Configuration Docker pour Python}
 \label{ann:docker_poetry}
 \begin{lstlisting}[language=Python, caption=Fichier de configuration Docker pour Python, label=lst:docker_poetry]
@@ -341,14 +358,292 @@ poetry:
   print("Les données ont été insérées avec succès dans MongoDB.")
 \end{lstlisting}
 
+\section{Résultats des requêtes}
+\label{ann:results_queries}
+\begin{lstlisting}[language=Python, caption=Résultats des requêtes, label=lst:results_queries]
+  [MongoDB] Function 'get_arrival_cities' executed in 0.024853 seconds
+  Liste des villes d'arrivée :
+  Marseille: 62
+  Amsterdam: 41
+  NewYork: 30
+  Nice: 29
+  Pekin: 28
+  Paris: 9
+  
+  [MongoDB] Function 'get_arrival_city_by_id' executed in 0.002618 seconds
+  Ville d'arrivée du vol V519 : NewYork
+  
+  Liste des pilotes :
+  [MongoDB] Function 'get_pilotes' executed in 0.002133 seconds
+  Delacroix
+  Delalande
+  Dubois
+  Dumas
+  Duparc
+  Duval
+  Leblanc
+  Ledru
+  Legrand
+  [MongoDB] Function 'get_pilotes' executed in 0.001526 seconds
+  Nombre de pilotes: 9
+  Vols au départ de Marseille :
+  [MongoDB] Function 'get_vols_by_departure_city' executed in 0.005160 seconds
+  V101 -> Amsterdam
+  V102 -> Amsterdam
+  V103 -> Amsterdam
+  V104 -> Amsterdam
+  V105 -> Amsterdam
+  V106 -> Amsterdam
+  V107 -> Amsterdam
+  V108 -> Amsterdam
+  V109 -> Amsterdam
+  V110 -> Amsterdam
+  V111 -> Amsterdam
+  V112 -> Amsterdam
+  V113 -> Amsterdam
+  V114 -> Amsterdam
+  V115 -> Amsterdam
+  V116 -> Amsterdam
+  V117 -> Amsterdam
+  V118 -> Amsterdam
+  V119 -> Amsterdam
+  V120 -> Amsterdam
+  V180 -> Amsterdam
+  V181 -> Amsterdam
+  V182 -> Amsterdam
+  V183 -> Amsterdam
+  V184 -> Amsterdam
+  V185 -> Amsterdam
+  V186 -> Amsterdam
+  V187 -> Amsterdam
+  V188 -> Amsterdam
+  V189 -> Amsterdam
+  V190 -> Amsterdam
+  V191 -> Amsterdam
+  V192 -> Amsterdam
+  V193 -> Amsterdam
+  V194 -> Amsterdam
+  V195 -> Amsterdam
+  V196 -> Amsterdam
+  V197 -> Amsterdam
+  V198 -> Amsterdam
+  V199 -> Amsterdam
+  V200 -> Amsterdam
+  V350 -> Paris
+  V351 -> Paris
+  V501 -> NewYork
+  V502 -> NewYork
+  V503 -> NewYork
+  V504 -> NewYork
+  V505 -> NewYork
+  V506 -> NewYork
+  V507 -> NewYork
+  V508 -> NewYork
+  V509 -> NewYork
+  V510 -> NewYork
+  V511 -> NewYork
+  V512 -> NewYork
+  V513 -> NewYork
+  V514 -> NewYork
+  V515 -> NewYork
+  V516 -> NewYork
+  V517 -> NewYork
+  V518 -> NewYork
+  V519 -> NewYork
+  V520 -> NewYork
+  V521 -> NewYork
+  V522 -> NewYork
+  V523 -> NewYork
+  V524 -> NewYork
+  V525 -> NewYork
+  V526 -> NewYork
+  V527 -> NewYork
+  V528 -> NewYork
+  V529 -> NewYork
+  V530 -> NewYork
+  V681 -> Pekin
+  V682 -> Pekin
+  V683 -> Pekin
+  V684 -> Pekin
+  V685 -> Pekin
+  V686 -> Pekin
+  V687 -> Pekin
+  V688 -> Pekin
+  V689 -> Pekin
+  V690 -> Pekin
+  V691 -> Pekin
+  V692 -> Pekin
+  V693 -> Pekin
+  V694 -> Pekin
+  
+  [MongoDB] Function 'get_reservations_by_client' executed in 0.007681 seconds
+  Réservations pour le client 1001 :
+  Réservation ID: R001, Vol ID: V690, Classe: Business, NbPlaces: 3
+  Détails du vol: De Marseille à Pekin le 19/04/07
+  
+  Réservation ID: R016, Vol ID: V141, Classe: Business, NbPlaces: 3
+  Détails du vol: De Amsterdam à Marseille le 1/04/07
+  
+  Réservation ID: R021, Vol ID: V790, Classe: Touriste, NbPlaces: 1
+  Détails du vol: De Metz à Marseille le 20/04/07
+  
+  Réservation ID: R022, Vol ID: V150, Classe: Touriste, NbPlaces: 1
+  Détails du vol: De Amsterdam à Marseille le 10/04/07
+  
+  Réservation ID: R033, Vol ID: V601, Classe: Economique, NbPlaces: 6
+  Détails du vol: De Ajaccio à Marseille le 1/04/07
+  
+  [MongoDB] Function 'get_clients_by_flight' executed in 0.001317 seconds
+  Clients sur le vol V519 :
+  [MongoDB] Function 'get_flights_by_pilot' executed in 0.002763 seconds
+  Vols opérés par le pilote Leblanc :
+  Vol ID: V101, De Marseille à Amsterdam le 1/04/07
+  Vol ID: V102, De Marseille à Amsterdam le 2/04/07
+  Vol ID: V103, De Marseille à Amsterdam le 3/04/07
+  Vol ID: V104, De Marseille à Amsterdam le 4/04/07
+  Vol ID: V105, De Marseille à Amsterdam le 5/04/07
+  Vol ID: V106, De Marseille à Amsterdam le 6/04/07
+  Vol ID: V107, De Marseille à Amsterdam le 7/04/07
+  Vol ID: V108, De Marseille à Amsterdam le 8/04/07
+  Vol ID: V109, De Marseille à Amsterdam le 9/04/07
+  Vol ID: V110, De Marseille à Amsterdam le 10/04/07
+  Vol ID: V111, De Marseille à Amsterdam le 11/04/07
+  Vol ID: V112, De Marseille à Amsterdam le 12/04/07
+  Vol ID: V113, De Marseille à Amsterdam le 13/04/07
+  Vol ID: V114, De Marseille à Amsterdam le 14/04/07
+  Vol ID: V115, De Marseille à Amsterdam le 15/04/07
+  Vol ID: V116, De Marseille à Amsterdam le 16/04/07
+  Vol ID: V117, De Marseille à Amsterdam le 17/04/07
+  Vol ID: V118, De Marseille à Amsterdam le 18/04/07
+  Vol ID: V119, De Marseille à Amsterdam le 19/04/07
+  Vol ID: V120, De Marseille à Amsterdam le 20/04/07
+  Vol ID: V141, De Amsterdam à Marseille le 1/04/07
+  Vol ID: V142, De Amsterdam à Marseille le 2/04/07
+  Vol ID: V143, De Amsterdam à Marseille le 3/04/07
+  Vol ID: V144, De Amsterdam à Marseille le 4/04/07
+  Vol ID: V145, De Amsterdam à Marseille le 5/04/07
+  Vol ID: V146, De Amsterdam à Marseille le 6/04/07
+  Vol ID: V147, De Amsterdam à Marseille le 7/04/07
+  Vol ID: V148, De Amsterdam à Marseille le 8/04/07
+  Vol ID: V149, De Amsterdam à Marseille le 9/04/07
+  Vol ID: V150, De Amsterdam à Marseille le 10/04/07
+  Vol ID: V151, De Amsterdam à Marseille le 11/04/07
+  Vol ID: V152, De Amsterdam à Marseille le 12/04/07
+  Vol ID: V153, De Amsterdam à Marseille le 13/04/07
+  Vol ID: V154, De Amsterdam à Marseille le 14/04/07
+  Vol ID: V155, De Amsterdam à Marseille le 15/04/07
+  Vol ID: V156, De Amsterdam à Marseille le 16/04/07
+  Vol ID: V157, De Amsterdam à Marseille le 17/04/07
+  Vol ID: V180, De Marseille à Amsterdam le 10/04/07
+  Vol ID: V181, De Marseille à Amsterdam le 11/04/07
+  Vol ID: V182, De Marseille à Amsterdam le 12/04/07
+  Vol ID: V183, De Marseille à Amsterdam le 13/04/07
+  Vol ID: V184, De Marseille à Amsterdam le 14/04/07
+  Vol ID: V185, De Marseille à Amsterdam le 15/04/07
+  Vol ID: V186, De Marseille à Amsterdam le 16/04/07
+  Vol ID: V187, De Marseille à Amsterdam le 17/04/07
+  Vol ID: V188, De Marseille à Amsterdam le 18/04/07
+  Vol ID: V189, De Marseille à Amsterdam le 19/04/07
+  Vol ID: V190, De Marseille à Amsterdam le 20/04/07
+  Vol ID: V191, De Marseille à Amsterdam le 21/04/07
+  Vol ID: V192, De Marseille à Amsterdam le 22/04/07
+  Vol ID: V193, De Marseille à Amsterdam le 23/04/07
+  Vol ID: V194, De Marseille à Amsterdam le 24/04/07
+  Vol ID: V195, De Marseille à Amsterdam le 25/04/07
+  Vol ID: V196, De Marseille à Amsterdam le 26/04/07
+  Vol ID: V197, De Marseille à Amsterdam le 27/04/07
+  Vol ID: V198, De Marseille à Amsterdam le 28/04/07
+  Vol ID: V199, De Marseille à Amsterdam le 29/04/07
+  Vol ID: V200, De Marseille à Amsterdam le 30/04/07
+  
+  [MongoDB] Function 'get_clients_by_pilot' executed in 0.011204 seconds
+  Clients ayant des réservations sur les vols du pilote Leblanc :
+  Client ID: 1031, Nom: Bohr, Vol ID: V101, NbPlaces: 2, Classe: Business
+  
+  Client ID: 1027, Nom: Lorentz, Vol ID: V101, NbPlaces: 2, Classe: Business
+  
+  Client ID: 1031, Nom: Bohr, Vol ID: V101, NbPlaces: 5, Classe: Touriste
+  
+  Client ID: 1033, Nom: Dirac, Vol ID: V101, NbPlaces: 7, Classe: Touriste
+  
+  Client ID: 1028, Nom: Lenard, Vol ID: V101, NbPlaces: 6, Classe: Touriste
+  
+  Client ID: 1021, Nom: Perse, Vol ID: V101, NbPlaces: 6, Classe: Touriste
+  
+  Client ID: 1002, Nom: Leblanc, Vol ID: V101, NbPlaces: 5, Classe: Touriste
+  
+  Client ID: 1029, Nom: Planck, Vol ID: V101, NbPlaces: 7, Classe: Economique
+  
+  Client ID: 1015, Nom: Rolland, Vol ID: V101, NbPlaces: 1, Classe: Economique
+  
+  Client ID: 1006, Nom: Grignard, Vol ID: V101, NbPlaces: 4, Classe: Economique
+  
+  Client ID: 1001, Nom: Becquerel, Vol ID: V141, NbPlaces: 3, Classe: Business
+  
+  Client ID: 1008, Nom: Joliot, Vol ID: V141, NbPlaces: 2, Classe: Touriste
+  
+  Client ID: 1011, Nom: Richet, Vol ID: V141, NbPlaces: 8, Classe: Economique
+  
+  Client ID: 1020, Nom: Gide, Vol ID: V150, NbPlaces: 1, Classe: Business
+  
+  Client ID: 1027, Nom: Lorentz, Vol ID: V150, NbPlaces: 1, Classe: Business
+  
+  Client ID: 1001, Nom: Becquerel, Vol ID: V150, NbPlaces: 1, Classe: Touriste
+  
+  Client ID: 1029, Nom: Planck, Vol ID: V150, NbPlaces: 7, Classe: Economique
+\end{lstlisting}
+
 \section{Profiling des Requêtes}
 \label{ann:profiling}
-\begin{verbatim}
-# Détails de la performance des requêtes dans chaque base
-\end{verbatim}
+\begin{lstlisting}[language=Python, caption=Profiling des requêtes, label=lst:profiling]
+import time
+from functools import wraps
+import csv
+
+# Global list to store performance results
+performance_results = []
+
+def timing_decorator(method_group = None):
+  """
+  A decorator to measure execution time of methods and log the results.
+
+  Args:
+    method_group (str): The group or class name (e.g., 'MongoDB' or 'JSON').
+
+  Returns:
+    function: The decorated function with added timing code.
+  """
+  def decorator(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+      nonlocal method_group
+      if method_group is None and args:
+        self = args[0]
+        method_group = getattr(self, 'method_group', 'Undefined')
+
+      start_time = time.perf_counter()
+
+      result = func(*args, **kwargs)
+
+      end_time = time.perf_counter()
+
+      execution_time = end_time - start_time
+
+      performance_results.append({
+        'method_group': method_group,
+        'function_name': func.__name__,
+        'execution_time': execution_time
+      })
+      # Print the result
+      print(f"[{method_group}] Function '{func.__name__}' executed in {execution_time:.6f} seconds")
+      # Return the original function's result
+      return result
+    return wrapper
+  return decorator
+\end{lstlisting}
 
 \section{Dépôt Git}
 \label{ann:git_repo}
 Vous trouverez le dépôt Git de ce projet sur GitHub: \href{https://github.com/sessaadouni/BookingSystem-app}{GitHub - BookingSystem-app}.
 
-Pour pouvoir tester le projet vous pourrez suivre les étapes mises dans le fichier \texttt{README.md}.
+Pour pouvoir tester le projet vous pourrez suivre les étapes mises dans le fichier \href{https://github.com/sessaadouni/BookingSystem-app/blob/master/README.md}{\texttt{README.md}}.

@@ -6,7 +6,8 @@
 \contentsline {figure}{\numberline {2.3}{\ignorespaces Insertion des documents dans Redis}}{8}{figure.caption.10}%
 \contentsline {figure}{\numberline {2.4}{\ignorespaces Insertion des documents dans MongoDB}}{9}{figure.caption.11}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {3.1}{\ignorespaces Comparaison des performances avec les données d'origine et avec un grand volume de données}}{11}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.1}{\ignorespaces Comparaison des ressources matérielles utilisées avec les données d'origine et avec un grand volume de données}}{11}{figure.caption.12}%
+\contentsline {figure}{\numberline {3.2}{\ignorespaces Comparaison des performances avec les données d'origine et avec un grand volume de données}}{12}{figure.caption.13}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
 \addvspace {10\p@ }
