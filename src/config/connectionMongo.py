@@ -4,7 +4,7 @@ def connect_mongodb():
   from dotenv import load_dotenv # type: ignore
   from os import getenv
   
-  load_dotenv()
+  load_dotenv(".env")
   
   try:
     client = MongoClient(getenv("MONGO_URI"), serverSelectionTimeoutMS=5000)
