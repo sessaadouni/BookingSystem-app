@@ -56,6 +56,8 @@ cp .docker/redis/.env.redis.example .docker/redis/.env.redis
 cp .env.example .env
 </code></pre>
 
+Change the values of the environment variables in the .env.* files to match your configuration.
+
 <h3>Setting Up Development Environment</h3>
 <pre><code>make compose-up
 </code></pre>
