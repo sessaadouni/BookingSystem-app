@@ -1,26 +1,26 @@
 Performance Report for REDIS_JSON
 ==================================================
 Total Functions: 11
-Total Execution Time: 39.808452 seconds
-Average Execution Time: 3.618950 seconds
-Median Execution Time: 0.239680 seconds
-Execution Time Std Dev: 11.140997
-Max Execution Time: 37.209398 seconds
-Min Execution Time: 0.201679 seconds
-Average Memory Used: 25.72 MB
-Average CPU Usage: 11.17%
+Total Execution Time: 2.521085 seconds
+Average Execution Time: 0.229190 seconds
+Median Execution Time: 0.202224 seconds
+Execution Time Std Dev: 0.064739
+Max Execution Time: 0.404595 seconds
+Min Execution Time: 0.201873 seconds
+Average Memory Used: 0.03 MB
+Average CPU Usage: 3.95%
 
 ==================================================
 Detailed Results:
 ==================================================
-Function: load_data_from_redis, Execution Time: 37.209398s, Memory Used: 282.00 MB, CPU Usage: 18.00%
-Function: get_arrival_cities, Execution Time: 0.228705s, Memory Used: 0.75 MB, CPU Usage: 5.90%
-Function: get_arrival_city_by_id, Execution Time: 0.201679s, Memory Used: 0.00 MB, CPU Usage: 8.80%
-Function: get_pilotes, Execution Time: 0.230120s, Memory Used: 0.12 MB, CPU Usage: 5.80%
-Function: get_pilotes, Execution Time: 0.245529s, Memory Used: 0.00 MB, CPU Usage: 17.50%
-Function: get_vols_by_departure_city, Execution Time: 0.246476s, Memory Used: 0.00 MB, CPU Usage: 12.90%
-Function: get_reservations_by_client, Execution Time: 0.241728s, Memory Used: 0.00 MB, CPU Usage: 13.60%
-Function: get_clients_by_flight, Execution Time: 0.225559s, Memory Used: 0.00 MB, CPU Usage: 12.20%
-Function: get_flights_by_pilot, Execution Time: 0.239680s, Memory Used: 0.00 MB, CPU Usage: 10.00%
-Function: get_flights_by_pilot, Execution Time: 0.234635s, Memory Used: 0.00 MB, CPU Usage: 4.70%
-Function: get_clients_by_pilot, Execution Time: 0.504943s, Memory Used: 0.00 MB, CPU Usage: 13.50%
+Function: load_data_from_redis, Execution Time: 0.296861s, Memory Used: 0.38 MB, CPU Usage: 9.90%
+Function: get_arrival_cities, Execution Time: 0.202484s, Memory Used: 0.00 MB, CPU Usage: 13.90%
+Function: get_arrival_city_by_id, Execution Time: 0.201919s, Memory Used: 0.00 MB, CPU Usage: 5.20%
+Function: get_pilotes, Execution Time: 0.202224s, Memory Used: 0.00 MB, CPU Usage: 2.70%
+Function: get_pilotes, Execution Time: 0.202183s, Memory Used: 0.00 MB, CPU Usage: 2.60%
+Function: get_vols_by_departure_city, Execution Time: 0.202443s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_reservations_by_client, Execution Time: 0.202014s, Memory Used: 0.00 MB, CPU Usage: 2.60%
+Function: get_clients_by_flight, Execution Time: 0.202359s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_flights_by_pilot, Execution Time: 0.202129s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_flights_by_pilot, Execution Time: 0.201873s, Memory Used: 0.00 MB, CPU Usage: 0.00%
+Function: get_clients_by_pilot, Execution Time: 0.404595s, Memory Used: 0.00 MB, CPU Usage: 2.60%

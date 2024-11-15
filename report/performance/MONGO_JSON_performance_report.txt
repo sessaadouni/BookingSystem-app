@@ -1,26 +1,26 @@
 Performance Report for MONGO_JSON
 ==================================================
 Total Functions: 11
-Total Execution Time: 3.743977 seconds
-Average Execution Time: 0.340362 seconds
-Median Execution Time: 0.239245 seconds
-Execution Time Std Dev: 0.266642
-Max Execution Time: 1.109439 seconds
-Min Execution Time: 0.202056 seconds
-Average Memory Used: 25.49 MB
-Average CPU Usage: 8.41%
+Total Execution Time: 2.433614 seconds
+Average Execution Time: 0.221238 seconds
+Median Execution Time: 0.202139 seconds
+Execution Time Std Dev: 0.060967
+Max Execution Time: 0.404921 seconds
+Min Execution Time: 0.201484 seconds
+Average Memory Used: 0.07 MB
+Average CPU Usage: 1.76%
 
 ==================================================
 Detailed Results:
 ==================================================
-Function: load_data_from_mongo, Execution Time: 1.109439s, Memory Used: 279.49 MB, CPU Usage: 16.20%
-Function: get_arrival_cities, Execution Time: 0.232013s, Memory Used: 0.75 MB, CPU Usage: 5.80%
-Function: get_arrival_city_by_id, Execution Time: 0.202056s, Memory Used: 0.00 MB, CPU Usage: 2.40%
-Function: get_pilotes, Execution Time: 0.263035s, Memory Used: 0.00 MB, CPU Usage: 10.90%
-Function: get_pilotes, Execution Time: 0.234294s, Memory Used: 0.00 MB, CPU Usage: 15.10%
-Function: get_vols_by_departure_city, Execution Time: 0.254670s, Memory Used: 0.00 MB, CPU Usage: 6.60%
-Function: get_reservations_by_client, Execution Time: 0.242726s, Memory Used: 0.00 MB, CPU Usage: 6.20%
-Function: get_clients_by_flight, Execution Time: 0.239245s, Memory Used: 0.00 MB, CPU Usage: 5.50%
-Function: get_flights_by_pilot, Execution Time: 0.236510s, Memory Used: 0.00 MB, CPU Usage: 9.30%
-Function: get_flights_by_pilot, Execution Time: 0.237911s, Memory Used: 0.00 MB, CPU Usage: 3.70%
-Function: get_clients_by_pilot, Execution Time: 0.492079s, Memory Used: 0.12 MB, CPU Usage: 10.80%
+Function: load_data_from_mongo, Execution Time: 0.209908s, Memory Used: 0.75 MB, CPU Usage: 7.80%
+Function: get_arrival_cities, Execution Time: 0.201944s, Memory Used: 0.00 MB, CPU Usage: 0.00%
+Function: get_arrival_city_by_id, Execution Time: 0.202499s, Memory Used: 0.00 MB, CPU Usage: 0.00%
+Function: get_pilotes, Execution Time: 0.201484s, Memory Used: 0.00 MB, CPU Usage: 2.60%
+Function: get_pilotes, Execution Time: 0.202102s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_vols_by_departure_city, Execution Time: 0.202231s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_reservations_by_client, Execution Time: 0.201982s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_clients_by_flight, Execution Time: 0.202139s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_flights_by_pilot, Execution Time: 0.202485s, Memory Used: 0.00 MB, CPU Usage: 0.00%
+Function: get_flights_by_pilot, Execution Time: 0.201918s, Memory Used: 0.00 MB, CPU Usage: 0.00%
+Function: get_clients_by_pilot, Execution Time: 0.404921s, Memory Used: 0.00 MB, CPU Usage: 3.80%
