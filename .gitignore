@@ -17,7 +17,7 @@ poetry.lock
 __pycache__/
 
 # Données JSON de la DAL
-src/libs/DAL/db/json/*
+src/libs/DAL/db/json/*.json
 
 # Répertoires de build
 dist/
