@@ -105,9 +105,10 @@ make inject-mongo
 </code></pre>
 
 <h3>Test Queries</h3>
-<pre><code>make python file=src/api/request_json.py
-make python file=src/api/request_redis.py
-make python file=src/api/request_mongo.py
+<pre><code>make python file=src/api/requests_json.py
+make python file=src/api/req_mongo.py
+make python file=src/api/requests_redis.py
+make python file=src/api/requests_mongo.py
 </code></pre>
 
 <h3>Test Big Data</h3>
@@ -116,8 +117,8 @@ Inject fake data into MongoDB and Redis.
 Test queries with big data.
 <pre><code>
 make python file=src/api/req_mongo.py
-make python file=src/api/request_redis.py
-make python file=src/api/request_mongo.py
+make python file=src/api/requests_redis.py
+make python file=src/api/requests_mongo.py
 </code></pre>
 
 </details>

@@ -1,0 +1,25 @@
+Performance Report for JSON
+==================================================
+Total Functions: 10
+Total Execution Time: 2.226349 seconds
+Average Execution Time: 0.222635 seconds
+Median Execution Time: 0.202299 seconds
+Execution Time Std Dev: 0.063719
+Max Execution Time: 0.403968 seconds
+Min Execution Time: 0.201507 seconds
+Average Memory Used: 0.00 MB
+Average CPU Usage: 8.32%
+
+==================================================
+Detailed Results:
+==================================================
+Function: get_arrival_cities, Execution Time: 0.202139s, Memory Used: 0.00 MB, CPU Usage: 1.30%
+Function: get_arrival_city_by_id, Execution Time: 0.202431s, Memory Used: 0.00 MB, CPU Usage: 6.60%
+Function: get_pilotes, Execution Time: 0.202402s, Memory Used: 0.00 MB, CPU Usage: 2.50%
+Function: get_pilotes, Execution Time: 0.202150s, Memory Used: 0.00 MB, CPU Usage: 18.30%
+Function: get_vols_by_departure_city, Execution Time: 0.204424s, Memory Used: 0.00 MB, CPU Usage: 16.70%
+Function: get_reservations_by_client, Execution Time: 0.201911s, Memory Used: 0.00 MB, CPU Usage: 2.60%
+Function: get_clients_by_flight, Execution Time: 0.203221s, Memory Used: 0.00 MB, CPU Usage: 6.50%
+Function: get_flights_by_pilot, Execution Time: 0.202195s, Memory Used: 0.00 MB, CPU Usage: 13.50%
+Function: get_flights_by_pilot, Execution Time: 0.201507s, Memory Used: 0.00 MB, CPU Usage: 2.70%
+Function: get_clients_by_pilot, Execution Time: 0.403968s, Memory Used: 0.00 MB, CPU Usage: 12.50%
