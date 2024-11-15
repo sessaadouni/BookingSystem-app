@@ -1,4 +1,5 @@
 <!-- markdownlint-disable MD033 -->
+
 # BookingSystem Project
 
 ## Project Overview
@@ -56,7 +57,7 @@ cp .docker/redis/.env.redis.example .docker/redis/.env.redis
 cp .env.example .env
 </code></pre>
 
-Change the values of the environment variables in the .env.* files to match your configuration.
+Change the values of the environment variables in the .env.\* files to match your configuration.
 
 <h3>Setting Up Development Environment</h3>
 <pre><code>make compose-up
@@ -96,7 +97,7 @@ make inject-mongo
 <pre><code>make mongo-shell
 
 > show dbs
-> use BookingSystem
+> use BookingSystemDB
 > db.clients.find()
 > db.vols.find()
 > db.reservations.find()
