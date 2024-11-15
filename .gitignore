@@ -27,6 +27,8 @@ build/
 # Cache Docker
 .docker-data/
 
+Report/rapport_bdd.zip
+
 # Fichiers LaTeX temporaires
 Report/*.toc
 Report/*.synctex.gz
